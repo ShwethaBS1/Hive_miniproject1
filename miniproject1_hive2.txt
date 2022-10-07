@@ -1,0 +1,980 @@
+This is a real time dataset of the ineuron technical consultant team. You have to perform hive analysis on this given dataset.
+
+Download Dataset 1 - https://drive.google.com/file/d/1WrG-9qv6atP-W3P_-gYln1hHyFKRKMHP/view
+
+Download Dataset 2 - https://drive.google.com/file/d/1-JIPCZ34dyN6k9CqJa-Y8yxIGq6vTVXU/view
+
+Note: both files are csv files. 
+
+
+1. Create a schema based on the given dataset
+
+     use hive_class_b2;
+     Create table AgentLoginReport
+    > (
+    > SL_NO int,
+    > Agent_Name String,
+    > Date String,
+    > Login_Time string,
+    > Logout_Time string,
+    > Duration string
+    > )
+    > row format delimited
+    > fields terminated by ','
+    > TBLPROPERTIES("skip.header.line.count"="1");
+OK
+Time taken: 9.099 seconds
+   Create table AgentPerform
+    > (
+    > SL_NO int,
+    > Date string,
+    > Agent_Name string,
+    > Total_Chats int,
+    > Average_Response_Time string,
+    > Average_Resolution_Time string,
+    > Average_Rating float,
+    > Total_Feedback int
+    > )
+    > row format delimited 
+    > fields terminated by '.'
+    > TBLPROPERTIES("skip.header.line.count"="1");
+
+2. Dump the data inside the hdfs in the given schema location.
+hive> load data local inpath 'file:///tmp/student_hive_temp/AgentLogingReport.csv' into table AgentLoginReport;
+Loading data to table hive_class_b2.agentloginreport
+Table hive_class_b2.agentloginreport stats: [numFiles=1, totalSize=55351]
+OK
+Time taken: 4.002 seconds
+hive> load data local inpath 'file:///tmp/student_hive_temp/AgentPerformance22.csv' into table AgentPerform;
+Loading data to table hive_class_b2.agentperformance
+Table hive_class_b2.agentperformance stats: [numFiles=1, totalSize=109853]
+OK
+Time taken: 1.124 seconds
+
+3. List of all agents' names. 
+
+select Agent_Name from AgentPerform;
+
+4. Find out agent average rating.
+select Agent_Name,avg(average_rating) from AgentPerform group by Agent_Name;
+Abhishek 	0.0
+Aditya 	0.0
+Aditya Shinde	1.8003333409627278
+Aditya_iot 	2.3453333377838135
+Amersh 	0.0
+Ameya Jain	2.21966667175293
+Anirudh 	0.6449999968210857
+Ankit Sharma	0.0
+Ankitjha 	0.26666666666666666
+Anurag Tiwari	0.18333333333333332
+Aravind 	2.1813333511352537
+Ashad Nasim	0.16666666666666666
+Ashish 	0.0
+Ayushi Mishra	3.481999969482422
+Bharath 	2.9836666584014893
+Boktiar Ahmed Bappy	3.567999982833862
+Chaitra K Hiremath	0.8646666606267294
+Deepranjan Gupta	2.886666695276896
+Dibyanshu 	0.0
+Harikrishnan Shaji	2.6396666526794434
+Hitesh Choudhary	0.0
+Hrisikesh Neogi	3.1363333304723104
+Hyder Abbas	0.0
+Ineuron Intelligence 	0.0
+Ishawant Kumar	3.543333347638448
+Jawala Prakash	3.472000018755595
+Jayant Kumar	1.068666664759318
+Jaydeep Dixit	3.1670000314712525
+Khushboo Priya	3.703666663169861
+Madhulika G	3.4986666520436605
+Mahak 	0.1
+Mahesh Sarade	2.4003333330154417
+Maitry 	2.9270000139872234
+Maneesh 	0.16666666666666666
+Manjunatha A	3.5946666876475017
+Mithun S	2.359000023206075
+Mukesh 	0.3096666653951009
+Mukesh Rao 	0.25566666523615517
+Muskan Garg	0.712333329518636
+Nandani Gupta	2.9236666679382326
+Nishtha Jain	3.282333334287008
+Nitin M	0.0
+Prabir Kumar Satapathy	2.5103333314259846
+Prateek _iot 	2.4383333206176756
+Prerna Singh	3.2326666434605915
+Rishav Dash	1.4268333355585734
+Rohan 	0.0
+Saif Khan	0.0
+Saikumarreddy N	1.9803333441416422
+Samprit 	0.0
+Sandipan Saha	0.4289999961853027
+Sanjeev Kumar	3.3830000241597493
+Sanjeevan 	0.0
+Saurabh Shukla	0.5556666692097981
+Shiva Srivastava	0.9446666717529297
+Shivan K	2.841333341598511
+Shivan_S 	0.14166666666666666
+Shivananda Sonwane	4.232666659355163
+Shubham Sharma	3.2253333568572997
+Sowmiya Sivakumar	1.2599999984105428
+Spuri 	0.0
+Sudhanshu Kumar	0.3333333333333333
+Suraj S Bilgi	0.31200000445048015
+Swati 	2.4236666917800904
+Tarun 	0.05
+Uday Mishra	0.0
+Vasanth P	0.0
+Vivek 	0.5006666660308838
+Wasim 	2.400000015894572
+Zeeshan 	2.286999988555908
+Time taken: 89.915 seconds, Fetched: 70 row(s)
+hive> 
+
+5. Total working days for each agents 
+select Agent_Name,count(distinct Date) as No_of_Working_Days from AgentLoginREport group by Agent_Name;
+Aditya Shinde	1
+Aditya_iot	8
+Amersh	2
+Ameya Jain	7
+Ankitjha	2
+Anurag Tiwari	10
+Aravind	7
+Ayushi Mishra	9
+Bharath	8
+Boktiar Ahmed Bappy	9
+Chaitra K Hiremath	7
+Deepranjan Gupta	10
+Dibyanshu	9
+Harikrishnan Shaji	9
+Hrisikesh Neogi	9
+Hyder Abbas	2
+Ineuron Intelligence	1
+Ishawant Kumar	11
+Jawala Prakash	9
+Jaydeep Dixit	7
+Khushboo Priya	8
+Madhulika G	8
+Mahesh Sarade	8
+Maitry	5
+Manjunatha A	7
+Mithun S	8
+Mukesh	2
+Muskan Garg	6
+Nandani Gupta	9
+Nishtha Jain	8
+Nitin M	1
+Prabir Kumar Satapathy	7
+Prateek _iot	11
+Prerna Singh	9
+Rishav Dash	7
+Saikumarreddy N	7
+Sanjeev Kumar	9
+Saurabh Shukla	4
+Shiva Srivastava	8
+Shivan K	8
+Shivananda Sonwane	10
+Shubham Sharma	11
+Sowmiya Sivakumar	8
+Sudhanshu Kumar	6
+Suraj S Bilgi	2
+Swati	4
+Tarun	1
+Wasim	9
+Zeeshan	9
+Time taken: 66.815 seconds, Fetched: 49 row(s)
+hive> 
+
+6. Total query that each agent have taken 
+hive> select Agent_Name,sum(total_chats) as total_queries from AgentPerform group by Agent_Name;
+Abhishek 	0
+Aditya 	0
+Aditya Shinde	277
+Aditya_iot 	231
+Amersh 	0
+Ameya Jain	322
+Anirudh 	81
+Ankit Sharma	0
+Ankitjha 	5
+Anurag Tiwari	4
+Aravind 	366
+Ashad Nasim	18
+Ashish 	0
+Ayushi Mishra	514
+Bharath 	369
+Boktiar Ahmed Bappy	452
+Chaitra K Hiremath	64
+Deepranjan Gupta	493
+Dibyanshu 	1
+Harikrishnan Shaji	381
+Hitesh Choudhary	1
+Hrisikesh Neogi	578
+Hyder Abbas	0
+Ineuron Intelligence 	0
+Ishawant Kumar	338
+Jawala Prakash	439
+Jayant Kumar	127
+Jaydeep Dixit	512
+Khushboo Priya	446
+Madhulika G	469
+Mahak 	7
+Mahesh Sarade	364
+Maitry 	542
+Maneesh 	4
+Manjunatha A	413
+Mithun S	503
+Mukesh 	19
+Mukesh Rao 	5
+Muskan Garg	56
+Nandani Gupta	560
+Nishtha Jain	373
+Nitin M	0
+Prabir Kumar Satapathy	299
+Prateek _iot 	190
+Prerna Singh	401
+Rishav Dash	409
+Rohan 	0
+Saif Khan	0
+Saikumarreddy N	364
+Samprit 	1
+Sandipan Saha	30
+Sanjeev Kumar	507
+Sanjeevan 	0
+Saurabh Shukla	16
+Shiva Srivastava	53
+Shivan K	357
+Shivan_S 	7
+Shivananda Sonwane	441
+Shubham Sharma	510
+Sowmiya Sivakumar	206
+Spuri 	0
+Sudhanshu Kumar	2
+Suraj S Bilgi	28
+Swati 	524
+Tarun 	22
+Uday Mishra	0
+Vasanth P	0
+Vivek 	44
+Wasim 	433
+Zeeshan 	542
+Time taken: 58.261 seconds, Fetched: 70 row(s)
+hive> 
+
+7. Total Feedback that each agent have received 
+select Agent_Name,sum(total_feedback) as total_feedback from AgentPerform group by Agent_Name;
+Abhishek 	0
+Aditya 	0
+Aditya Shinde	153
+Aditya_iot 	131
+Amersh 	0
+Ameya Jain	228
+Anirudh 	39
+Ankit Sharma	0
+Ankitjha 	3
+Anurag Tiwari	3
+Aravind 	233
+Ashad Nasim	9
+Ashish 	0
+Ayushi Mishra	329
+Bharath 	247
+Boktiar Ahmed Bappy	311
+Chaitra K Hiremath	37
+Deepranjan Gupta	312
+Dibyanshu 	0
+Harikrishnan Shaji	231
+Hitesh Choudhary	0
+Hrisikesh Neogi	367
+Hyder Abbas	0
+Ineuron Intelligence 	0
+Ishawant Kumar	202
+Jawala Prakash	250
+Jayant Kumar	70
+Jaydeep Dixit	305
+Khushboo Priya	289
+Madhulika G	281
+Mahak 	5
+Mahesh Sarade	216
+Maitry 	347
+Maneesh 	3
+Manjunatha A	254
+Mithun S	364
+Mukesh 	17
+Mukesh Rao 	5
+Muskan Garg	37
+Nandani Gupta	308
+Nishtha Jain	257
+Nitin M	0
+Prabir Kumar Satapathy	222
+Prateek _iot 	107
+Prerna Singh	235
+Rishav Dash	264
+Rohan 	0
+Saif Khan	0
+Saikumarreddy N	290
+Samprit 	0
+Sandipan Saha	18
+Sanjeev Kumar	311
+Sanjeevan 	0
+Saurabh Shukla	8
+Shiva Srivastava	46
+Shivan K	243
+Shivan_S 	4
+Shivananda Sonwane	263
+Shubham Sharma	300
+Sowmiya Sivakumar	141
+Spuri 	0
+Sudhanshu Kumar	2
+Suraj S Bilgi	15
+Swati 	302
+Tarun 	6
+Uday Mishra	0
+Vasanth P	0
+Vivek 	20
+Wasim 	284
+Zeeshan 	335
+Time taken: 40.042 seconds, Fetched: 70 row(s)
+hive> 
+
+8. Agent name who have average rating between 3.5 to 4 
+select Agent_Name, avg(average_rating) as avg_rating from AgentPerform group by Agent_Name  having avg_rating between 3.5 and 4;
+Boktiar Ahmed Bappy	3.567999982833862
+Ishawant Kumar	3.543333347638448
+Khushboo Priya	3.703666663169861
+Manjunatha A	3.5946666876475017
+
+9. Agent name who have rating less than 3.5 
+select Agent_Name,avg(average_rating) as avg_rating from AgentPerform group by Agent_Name having avg_rating<3.5;
+Abhishek 	0.0
+Aditya 	0.0
+Aditya Shinde	1.8003333409627278
+Aditya_iot 	2.3453333377838135
+Amersh 	0.0
+Ameya Jain	2.21966667175293
+Anirudh 	0.6449999968210857
+Ankit Sharma	0.0
+Ankitjha 	0.26666666666666666
+Anurag Tiwari	0.18333333333333332
+Aravind 	2.1813333511352537
+Ashad Nasim	0.16666666666666666
+Ashish 	0.0
+Ayushi Mishra	3.481999969482422
+Bharath 	2.9836666584014893
+Chaitra K Hiremath	0.8646666606267294
+Deepranjan Gupta	2.886666695276896
+Dibyanshu 	0.0
+Harikrishnan Shaji	2.6396666526794434
+Hitesh Choudhary	0.0
+Hrisikesh Neogi	3.1363333304723104
+Hyder Abbas	0.0
+Ineuron Intelligence 	0.0
+Jawala Prakash	3.472000018755595
+Jayant Kumar	1.068666664759318
+Jaydeep Dixit	3.1670000314712525
+Madhulika G	3.4986666520436605
+Mahak 	0.1
+Mahesh Sarade	2.4003333330154417
+Maitry 	2.9270000139872234
+Maneesh 	0.16666666666666666
+Mithun S	2.359000023206075
+Mukesh 	0.3096666653951009
+Mukesh Rao 	0.25566666523615517
+Muskan Garg	0.712333329518636
+Nandani Gupta	2.9236666679382326
+Nishtha Jain	3.282333334287008
+Nitin M	0.0
+Prabir Kumar Satapathy	2.5103333314259846
+Prateek _iot 	2.4383333206176756
+Prerna Singh	3.2326666434605915
+Rishav Dash	1.4268333355585734
+Rohan 	0.0
+Saif Khan	0.0
+Saikumarreddy N	1.9803333441416422
+Samprit 	0.0
+Sandipan Saha	0.4289999961853027
+Sanjeev Kumar	3.3830000241597493
+Sanjeevan 	0.0
+Saurabh Shukla	0.5556666692097981
+Shiva Srivastava	0.9446666717529297
+Shivan K	2.841333341598511
+Shivan_S 	0.14166666666666666
+Shubham Sharma	3.2253333568572997
+Sowmiya Sivakumar	1.2599999984105428
+Spuri 	0.0
+Sudhanshu Kumar	0.3333333333333333
+Suraj S Bilgi	0.31200000445048015
+Swati 	2.4236666917800904
+Tarun 	0.05
+Uday Mishra	0.0
+Vasanth P	0.0
+Vivek 	0.5006666660308838
+Wasim 	2.400000015894572
+Zeeshan 	2.286999988555908
+
+10. Agent name who have rating more than 4.5 
+hive> select Agent_Name,avg(average_rating) as avg_rating from AgentPerform group by Agent_Name having avg_rating>4.5;
+
+
+select Agent_Name,round(avg(average_rating),2) avg_rating
+    > from AgentPerform
+    > where total_chats>0
+    > group by Agent_Name
+    > having avg(average_rating)>4.5;
+Aditya Shinde	4.5
+Aravind 	4.67
+Bharath 	4.71
+Jaydeep Dixit	4.52
+Mukesh 	4.64
+Saikumarreddy N	4.57
+Shivananda Sonwane	4.53
+Shubham Sharma	4.61
+Sudhanshu Kumar	5.0
+Suraj S Bilgi	4.68
+Wasim 	4.5
+
+11. How many feedback agents have received more than 4.5 average
+select Agent_Name,sum(total_feedback) as total_feedback
+    > from AgentPerform
+    > where total_chats>0
+    > group by Agent_Name
+    > having avg(average_rating)>4.5;
+Aditya Shinde	153
+Aravind 	233
+Bharath 	247
+Jaydeep Dixit	305
+Mukesh 	17
+Saikumarreddy N	290
+Shivananda Sonwane	263
+Shubham Sharma	300
+Sudhanshu Kumar	2
+Suraj S Bilgi	15
+Wasim 	284
+
+14. Find the number of chat on which they have received a feedback
+select Agent_Name,sum(total_chats) as total_chats,sum(total_feedback) as total_feedback
+    > from AgentPerform
+    > group by Agent_Name;
+Abhishek 	0	0
+Aditya 	0	0
+Aditya Shinde	277	153
+Aditya_iot 	231	131
+Amersh 	0	0
+Ameya Jain	322	228
+Anirudh 	81	39
+Ankit Sharma	0	0
+Ankitjha 	5	3
+Anurag Tiwari	4	3
+Aravind 	366	233
+Ashad Nasim	18	9
+Ashish 	0	0
+Ayushi Mishra	514	329
+Bharath 	369	247
+Boktiar Ahmed Bappy	452	311
+Chaitra K Hiremath	64	37
+Deepranjan Gupta	493	312
+Dibyanshu 	1	0
+Harikrishnan Shaji	381	231
+Hitesh Choudhary	1	0
+Hrisikesh Neogi	578	367
+Hyder Abbas	0	0
+Ineuron Intelligence 	0	0
+Ishawant Kumar	338	202
+Jawala Prakash	439	250
+Jayant Kumar	127	70
+Jaydeep Dixit	512	305
+Khushboo Priya	446	289
+Madhulika G	469	281
+Mahak 	7	5
+Mahesh Sarade	364	216
+Maitry 	542	347
+Maneesh 	4	3
+Manjunatha A	413	254
+Mithun S	503	364
+Mukesh 	19	17
+Mukesh Rao 	5	5
+Muskan Garg	56	37
+Nandani Gupta	560	308
+Nishtha Jain	373	257
+Nitin M	0	0
+Prabir Kumar Satapathy	299	222
+Prateek _iot 	190	107
+Prerna Singh	401	235
+Rishav Dash	409	264
+Rohan 	0	0
+Saif Khan	0	0
+Saikumarreddy N	364	290
+Samprit 	1	0
+Sandipan Saha	30	18
+Sanjeev Kumar	507	311
+Sanjeevan 	0	0
+Saurabh Shukla	16	8
+Shiva Srivastava	53	46
+Shivan K	357	243
+Shivan_S 	7	4
+Shivananda Sonwane	441	263
+Shubham Sharma	510	300
+Sowmiya Sivakumar	206	141
+Spuri 	0	0
+Sudhanshu Kumar	2	2
+Suraj S Bilgi	28	15
+Swati 	524	302
+Tarun 	22	6
+Uday Mishra	0	0
+Vasanth P	0	0
+Vivek 	44	20
+Wasim 	433	284
+Zeeshan 	542	335
+
+12. average weekly response time for each agent 
+select agent_name,
+    > date_format(from_unixtime(unix_timestamp(date,'MM/dd/yyyy')),'W') week_of_month,
+    > round(avg(3600*hour(average_response_time)+60*minute(average_response_time)+second(average_response_time)),2) avg_response_time_seconds
+    > from AgentPerform
+    > where total_chats>0
+    > group by agent_name, date_format(from_unixtime(unix_timestamp(date,'MM/dd/yyyy')),'W');
+Aditya Shinde	1	86.0
+Aditya Shinde	2	68.5
+Aditya Shinde	3	79.0
+Aditya_iot 	2	70.5
+Aditya_iot 	3	72.8
+Aditya_iot 	4	42.2
+Aditya_iot 	5	60.6
+Ameya Jain	2	0.0
+Ameya Jain	3	40.75
+Ameya Jain	4	46.2
+Ameya Jain	5	48.0
+Anirudh 	2	135.5
+Anirudh 	3	37.0
+Ankitjha 	2	0.0
+Ankitjha 	5	66.5
+Anurag Tiwari	2	126.5
+Aravind 	2	34.0
+Aravind 	3	49.0
+Aravind 	4	46.6
+Aravind 	5	61.0
+Ashad Nasim	2	579.5
+Ayushi Mishra	1	81.0
+Ayushi Mishra	2	72.2
+Ayushi Mishra	3	72.0
+Ayushi Mishra	4	79.14
+Ayushi Mishra	5	75.67
+Bharath 	1	63.0
+Bharath 	2	29.2
+Bharath 	3	35.75
+Bharath 	4	74.0
+Bharath 	5	31.2
+Boktiar Ahmed Bappy	1	64.0
+Boktiar Ahmed Bappy	2	50.43
+Boktiar Ahmed Bappy	3	103.67
+Boktiar Ahmed Bappy	4	75.43
+Boktiar Ahmed Bappy	5	94.43
+Chaitra K Hiremath	4	229.0
+Chaitra K Hiremath	5	45.0
+Deepranjan Gupta	1	70.0
+Deepranjan Gupta	2	76.4
+Deepranjan Gupta	3	81.2
+Deepranjan Gupta	4	83.67
+Deepranjan Gupta	5	69.57
+Dibyanshu 	2	38.0
+Harikrishnan Shaji	2	50.67
+Harikrishnan Shaji	3	53.17
+Harikrishnan Shaji	4	67.8
+Harikrishnan Shaji	5	41.8
+Hitesh Choudhary	3	0.0
+Hrisikesh Neogi	1	56.5
+Hrisikesh Neogi	2	65.0
+Hrisikesh Neogi	3	62.6
+Hrisikesh Neogi	4	82.6
+Hrisikesh Neogi	5	83.2
+Ishawant Kumar	2	68.0
+Ishawant Kumar	3	62.0
+Ishawant Kumar	4	66.71
+Ishawant Kumar	5	57.0
+Jawala Prakash	1	49.5
+Jawala Prakash	2	167.8
+Jawala Prakash	3	162.8
+Jawala Prakash	4	72.5
+Jawala Prakash	5	91.43
+Jayant Kumar	1	123.0
+Jayant Kumar	2	56.2
+Jayant Kumar	3	74.5
+Jaydeep Dixit	1	59.5
+Jaydeep Dixit	2	72.0
+Jaydeep Dixit	3	65.6
+Jaydeep Dixit	4	65.75
+Jaydeep Dixit	5	52.4
+Khushboo Priya	1	120.0
+Khushboo Priya	2	71.67
+Khushboo Priya	3	61.14
+Khushboo Priya	4	56.67
+Khushboo Priya	5	80.2
+Madhulika G	1	122.0
+Madhulika G	2	67.0
+Madhulika G	3	95.0
+Madhulika G	4	71.8
+Madhulika G	5	83.6
+Mahak 	2	0.0
+Mahesh Sarade	2	116.0
+Mahesh Sarade	3	59.17
+Mahesh Sarade	4	77.6
+Mahesh Sarade	5	83.6
+Maitry 	1	43.0
+Maitry 	2	84.2
+Maitry 	3	105.0
+Maitry 	4	77.33
+Maitry 	5	141.75
+Maneesh 	2	45.0
+Manjunatha A	1	38.5
+Manjunatha A	2	40.29
+Manjunatha A	3	37.43
+Manjunatha A	4	60.25
+Manjunatha A	5	44.6
+Mithun S	2	6.33
+Mithun S	3	70.0
+Mithun S	4	56.0
+Mithun S	5	46.6
+Mukesh 	5	50.0
+Mukesh Rao 	2	131.33
+Muskan Garg	5	35.6
+Nandani Gupta	1	226.0
+Nandani Gupta	2	85.2
+Nandani Gupta	3	64.4
+Nandani Gupta	4	85.67
+Nandani Gupta	5	77.0
+Nishtha Jain	2	75.0
+Nishtha Jain	3	60.71
+Nishtha Jain	4	122.2
+Nishtha Jain	5	67.6
+Prabir Kumar Satapathy	2	106.5
+Prabir Kumar Satapathy	3	49.75
+Prabir Kumar Satapathy	4	51.2
+Prabir Kumar Satapathy	5	64.75
+Prateek _iot 	2	22.0
+Prateek _iot 	3	38.25
+Prateek _iot 	4	45.8
+Prateek _iot 	5	45.4
+Prerna Singh	1	97.0
+Prerna Singh	2	69.0
+Prerna Singh	3	58.6
+Prerna Singh	4	60.8
+Prerna Singh	5	58.8
+Rishav Dash	1	165.0
+Rishav Dash	2	81.8
+Rishav Dash	3	75.4
+Rishav Dash	4	75.6
+Rishav Dash	5	98.0
+Saikumarreddy N	3	36.33
+Saikumarreddy N	4	55.0
+Saikumarreddy N	5	74.2
+Samprit 	2	0.0
+Sandipan Saha	3	59.0
+Sanjeev Kumar	1	83.0
+Sanjeev Kumar	2	51.8
+Sanjeev Kumar	3	88.6
+Sanjeev Kumar	4	68.67
+Sanjeev Kumar	5	51.2
+Saurabh Shukla	1	21.0
+Saurabh Shukla	2	35.0
+Saurabh Shukla	3	14.0
+Shiva Srivastava	4	120.0
+Shiva Srivastava	5	30.0
+Shivan K	1	127.0
+Shivan K	2	59.0
+Shivan K	3	42.8
+Shivan K	4	90.0
+Shivan K	5	58.4
+Shivan_S 	2	73.0
+Shivananda Sonwane	1	86.5
+Shivananda Sonwane	2	62.17
+Shivananda Sonwane	3	55.83
+Shivananda Sonwane	4	58.71
+Shivananda Sonwane	5	55.43
+Shubham Sharma	1	81.5
+Shubham Sharma	2	58.2
+Shubham Sharma	3	51.6
+Shubham Sharma	4	75.5
+Shubham Sharma	5	87.2
+Sowmiya Sivakumar	4	105.75
+Sowmiya Sivakumar	5	72.4
+Sudhanshu Kumar	2	48.0
+Sudhanshu Kumar	4	72.0
+Suraj S Bilgi	5	91.0
+Swati 	1	72.0
+Swati 	2	126.6
+Swati 	3	108.8
+Swati 	4	79.67
+Swati 	5	82.0
+Tarun 	1	0.0
+Vivek 	2	53.5
+Vivek 	3	101.33
+Wasim 	2	56.0
+Wasim 	3	38.75
+Wasim 	4	62.83
+Wasim 	5	60.6
+Zeeshan 	2	82.5
+Zeeshan 	3	172.8
+Zeeshan 	4	89.75
+Zeeshan 	5	92.8
+
+13. average weekly resolution time for each agents 
+ select agent_name,
+    > date_format(from_unixtime(unix_timestamp(date,'MM/dd/yyyy')),'W') week_of_month,
+    > round(avg(60*hour(average_resolution_time)+minute(average_resolution_time)+second(average_resolution_time)/60),2) avgresolution_time_in_min
+    > from AgentPerform
+    > where total_chats>0
+    > group by agent_name,date_format(from_unixtime(unix_timestamp(date,'MM/dd/yyyy')),'W');
+Aditya Shinde	1	19.87
+Aditya Shinde	2	21.99
+Aditya Shinde	3	31.7
+Aditya_iot 	2	18.08
+Aditya_iot 	3	21.26
+Aditya_iot 	4	15.68
+Aditya_iot 	5	14.76
+Ameya Jain	2	1.78
+Ameya Jain	3	11.13
+Ameya Jain	4	11.68
+Ameya Jain	5	11.9
+Anirudh 	2	14.01
+Anirudh 	3	12.23
+Ankitjha 	2	21.37
+Ankitjha 	5	2.93
+Anurag Tiwari	2	18.48
+Aravind 	2	17.87
+Aravind 	3	20.6
+Aravind 	4	18.81
+Aravind 	5	17.13
+Ashad Nasim	2	5.23
+Ayushi Mishra	1	30.25
+Ayushi Mishra	2	18.07
+Ayushi Mishra	3	20.58
+Ayushi Mishra	4	17.23
+Ayushi Mishra	5	19.53
+Bharath 	1	12.85
+Bharath 	2	16.23
+Bharath 	3	15.87
+Bharath 	4	12.35
+Bharath 	5	23.38
+Boktiar Ahmed Bappy	1	17.73
+Boktiar Ahmed Bappy	2	34.51
+Boktiar Ahmed Bappy	3	8.0
+Boktiar Ahmed Bappy	4	13.25
+Boktiar Ahmed Bappy	5	16.88
+Chaitra K Hiremath	4	4.98
+Chaitra K Hiremath	5	7.9
+Deepranjan Gupta	1	35.23
+Deepranjan Gupta	2	34.83
+Deepranjan Gupta	3	29.48
+Deepranjan Gupta	4	40.38
+Deepranjan Gupta	5	21.1
+Dibyanshu 	2	12.33
+Harikrishnan Shaji	2	10.64
+Harikrishnan Shaji	3	16.49
+Harikrishnan Shaji	4	24.98
+Harikrishnan Shaji	5	16.68
+Hitesh Choudhary	3	1.42
+Hrisikesh Neogi	1	20.13
+Hrisikesh Neogi	2	19.76
+Hrisikesh Neogi	3	15.98
+Hrisikesh Neogi	4	27.18
+Hrisikesh Neogi	5	25.61
+Ishawant Kumar	2	25.61
+Ishawant Kumar	3	14.79
+Ishawant Kumar	4	17.87
+Ishawant Kumar	5	18.16
+Jawala Prakash	1	9.55
+Jawala Prakash	2	13.89
+Jawala Prakash	3	20.41
+Jawala Prakash	4	12.48
+Jawala Prakash	5	17.82
+Jayant Kumar	1	23.0
+Jayant Kumar	2	19.92
+Jayant Kumar	3	12.44
+Jaydeep Dixit	1	19.65
+Jaydeep Dixit	2	25.44
+Jaydeep Dixit	3	26.86
+Jaydeep Dixit	4	30.28
+Jaydeep Dixit	5	23.73
+Khushboo Priya	1	27.65
+Khushboo Priya	2	26.13
+Khushboo Priya	3	15.51
+Khushboo Priya	4	14.4
+Khushboo Priya	5	19.04
+Madhulika G	1	15.3
+Madhulika G	2	15.31
+Madhulika G	3	18.84
+Madhulika G	4	20.55
+Madhulika G	5	25.6
+Mahak 	2	20.07
+Mahesh Sarade	2	17.73
+Mahesh Sarade	3	10.72
+Mahesh Sarade	4	17.51
+Mahesh Sarade	5	17.49
+Maitry 	1	18.12
+Maitry 	2	18.83
+Maitry 	3	19.31
+Maitry 	4	19.12
+Maitry 	5	19.83
+Maneesh 	2	6.94
+Manjunatha A	1	10.78
+Manjunatha A	2	20.37
+Manjunatha A	3	18.11
+Manjunatha A	4	18.25
+Manjunatha A	5	28.98
+Mithun S	2	8.13
+Mithun S	3	8.62
+Mithun S	4	9.88
+Mithun S	5	11.04
+Mukesh 	5	18.98
+Mukesh Rao 	2	76.76
+Muskan Garg	5	11.52
+Nandani Gupta	1	18.8
+Nandani Gupta	2	24.92
+Nandani Gupta	3	23.14
+Nandani Gupta	4	26.54
+Nandani Gupta	5	31.63
+Nishtha Jain	2	11.36
+Nishtha Jain	3	11.55
+Nishtha Jain	4	11.59
+Nishtha Jain	5	14.45
+Prabir Kumar Satapathy	2	9.16
+Prabir Kumar Satapathy	3	13.02
+Prabir Kumar Satapathy	4	10.09
+Prabir Kumar Satapathy	5	9.79
+Prateek _iot 	2	12.33
+Prateek _iot 	3	20.15
+Prateek _iot 	4	13.39
+Prateek _iot 	5	11.72
+Prerna Singh	1	15.47
+Prerna Singh	2	19.17
+Prerna Singh	3	32.8
+Prerna Singh	4	20.62
+Prerna Singh	5	20.36
+Rishav Dash	1	36.15
+Rishav Dash	2	20.27
+Rishav Dash	3	19.96
+Rishav Dash	4	27.07
+Rishav Dash	5	27.38
+Saikumarreddy N	3	15.38
+Saikumarreddy N	4	11.8
+Saikumarreddy N	5	16.31
+Samprit 	2	1.72
+Sandipan Saha	3	26.31
+Sanjeev Kumar	1	24.45
+Sanjeev Kumar	2	16.57
+Sanjeev Kumar	3	30.04
+Sanjeev Kumar	4	19.89
+Sanjeev Kumar	5	22.91
+Saurabh Shukla	1	10.58
+Saurabh Shukla	2	9.21
+Saurabh Shukla	3	6.7
+Shiva Srivastava	4	8.3
+Shiva Srivastava	5	6.02
+Shivan K	1	81.28
+Shivan K	2	21.74
+Shivan K	3	15.69
+Shivan K	4	18.48
+Shivan K	5	18.64
+Shivan_S 	2	18.37
+Shivananda Sonwane	1	24.48
+Shivananda Sonwane	2	24.87
+Shivananda Sonwane	3	21.14
+Shivananda Sonwane	4	20.9
+Shivananda Sonwane	5	23.28
+Shubham Sharma	1	24.61
+Shubham Sharma	2	27.5
+Shubham Sharma	3	23.78
+Shubham Sharma	4	21.14
+Shubham Sharma	5	26.29
+Sowmiya Sivakumar	4	19.68
+Sowmiya Sivakumar	5	19.99
+Sudhanshu Kumar	2	17.83
+Sudhanshu Kumar	4	40.65
+Suraj S Bilgi	5	39.42
+Swati 	1	25.27
+Swati 	2	21.01
+Swati 	3	25.55
+Swati 	4	17.27
+Swati 	5	19.48
+Tarun 	1	45.23
+Vivek 	2	8.46
+Vivek 	3	19.82
+Wasim 	2	22.88
+Wasim 	3	21.28
+Wasim 	4	21.82
+Wasim 	5	21.1
+Zeeshan 	2	18.84
+Zeeshan 	3	22.97
+Zeeshan 	4	18.15
+Zeeshan 	5	19.48
+
+15. Total contribution hour for each and every agents weekly basis
+select agent_name,
+    > date_format(from_unixtime(unix_timestamp(date,'dd-MMM-yy')),'W') week_of_month,
+    > round(sum(hour(duration)+minute(duration)/60+second(duration)/3600),2) total_contribution_hrs
+    > from AgentLoginReport
+    > group by agent_name,date_format(from_unixtime(unix_timestamp(date,'dd-MMM-yy')),'W');
+
+16. Perform inner join, left join and right join based on the agent column and after joining the table export that data into your local system.
+insert overwrite LOCAL DIRECTORY '/home/cloudera/injoinAgent'
+    > row format delimited
+    > fields terminated by ','
+    > select p.date,p.agent_name,p.total_chats,p.average_response_time,
+    > p.average_resolution_time,p.average_rating,p.total_feedback,
+    > l.login_time,l.logout_time,l.duration
+    > from AgentPerform p
+    > inner join
+    > AgentLoginReport l
+    > on p.agent_name=l.agent_name and
+    > from_unixtime(unix_timestamp(p.date,'MM/dd/yyy'))=from_unixtime(unix_timestamp(l.date,'dd-MMM-yy'));
+
+insert overwrite LOCAL DIRECTORY '/home/cloudera/leftAgent'
+    > row format delimited
+    > fields terminated by ','
+    > select p.date,p.agent_name,p.total_chats,p.average_response_time,
+    > p.average_resolution_time,p.average_rating,p.total_feedback,
+    > l.login_time,l.logout_time,l.duration
+    > from AgentPerform p
+    > Left join
+    > AgentLoginReport l
+    > on p.agent_name=l.agent_name and
+    > from_unixtime(unix_timestamp(p.date,'MM/dd/yyyy'))=from_unixtime(unix_timestamp(l.date,'dd-MMM-YY'));
+Query ID = cloudera_20221006074242_86c015da-efe6-4bef-a6ba-9a5e8b5b53f4
+
+insert overwrite LOCAL DIRECTORY '/home/cloudera/rightAgent'
+    > row format delimited
+    > fields terminated by ','
+    > select p.date,p.agent_name,p.total_chats,p.average_response_time,
+    > p.average_resolution_time,p.average_rating,p.total_feedback,
+    > l.login_time,l.logout_time,l.duration
+    > from AgentPerform p
+    > Right join
+    > AgentLoginReport l
+    > on p.agent_name=l.agent_name and
+    > from_unixtime(unix_timestamp(p.date,'MM/dd/yyyy'))=from_unixtime(unix_timestamp(l.date,'dd-MMM-YY'));
+Query ID = cloudera_20221006074545_2b4cbb4e-72ac-4e38-8ab8-45909f57a99d
+
+17. Perform partitioning on top of the agent column and then on top of that perform bucketing for each partitioning.
+create table agentperform_dynamic_part1(
+    > sl_no int,
+    > date date,
+    > total_chats int,
+    > average_response_time string,
+    > average_resolution_time string,
+    > average_rating float,
+    > total_feedback int)
+    > partitioned by(agent_name string)
+    > clustered by 
+    > (date)
+    > sorted by (date)
+    > into 5 buckets
+    > ;
+
+insert overwrite table agentperform_dynamic_part1 partition(agent_name)
+    > select sl_no,to_date(from_unixtime(unix_timestamp(date,'MM/dd/yyyy'))),
+    > total_chats,average_response_time,average_resolution_time,
+    > average_rating,total_feedback,agent_name
+    > from AgentPerform;
+Query ID = cloudera_20221006082828_312266c1-4e94-4aa0-b7ce-971dbd21b825
+
+
+
+
+
